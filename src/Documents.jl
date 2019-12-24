@@ -17,6 +17,7 @@ import ..Documenter:
     Writer
 
 import ..Documenter.Utilities.Markdown2
+import ..Documenter.Blueprint: DocumentBlueprint
 using DocStringExtensions
 import Markdown
 using Unicode
@@ -70,17 +71,6 @@ end
 
 # FIXME -- special overload for Utilities.parseblock
 Utilities.parseblock(code::AbstractString, doc, page::Documents.Page; kwargs...) = Utilities.parseblock(code, doc, page.source; kwargs...)
-
-# Document blueprints.
-# --------------------
-
-# Should contain all the information that is necessary to build a document.
-# Currently has enough information to just run doctests.
-struct DocumentBlueprint
-    pages :: Dict{String, Page} # Markdown files only.
-    modules :: Set{Module} # Which modules to check for missing docs?
-end
-
 
 # Document Nodes.
 # ---------------
