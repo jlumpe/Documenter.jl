@@ -50,6 +50,7 @@ include("DocChecks.jl")
 include("Writers/Writers.jl")
 include("Deps.jl")
 
+import .Blueprint: DocumentBlueprint, hide
 import .Utilities: Selectors
 import .Writers.HTMLWriter: HTML, asset
 import .Writers.HTMLWriter.RD: KaTeX, MathJax
@@ -239,56 +240,6 @@ function makedocs(components...; debug = false, format = HTML(), kwargs...)
     end
     debug ? document : nothing
 end
-
-"""
-$(SIGNATURES)
-
-Allows a page to be hidden in the navigation menu. It will only show up if it happens to be
-the current page. The hidden page will still be present in the linear page list that can be
-accessed via the previous and next page links. The title of the hidden page can be overriden
-using the `=>` operator as usual.
-
-# Usage
-
-```julia
-makedocs(
-    ...,
-    pages = [
-        ...,
-        hide("page1.md"),
-        hide("Title" => "page2.md")
-    ]
-)
-```
-"""
-hide(page::Pair) = (false, page.first, page.second, [])
-hide(page::AbstractString) = (false, nothing, page, [])
-
-"""
-$(SIGNATURES)
-
-Allows a subsection of pages to be hidden from the navigation menu. `root` will be linked
-to in the navigation menu, with the title determined as usual. `children` should be a list
-of pages (note that it **can not** be hierarchical).
-
-# Usage
-
-```julia
-makedocs(
-    ...,
-    pages = [
-        ...,
-        hide("Hidden section" => "hidden_index.md", [
-            "hidden1.md",
-            "Hidden 2" => "hidden2.md"
-        ]),
-        hide("hidden_index.md", [...])
-    ]
-)
-```
-"""
-hide(root::Pair, children) = (true, root.first, root.second, map(hide, children))
-hide(root::AbstractString, children) = (true, nothing, root, map(hide, children))
 
 include("deployconfig.jl")
 
